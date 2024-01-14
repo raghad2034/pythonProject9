@@ -1,0 +1,112 @@
+from tkinter import *
+from tkinter import messagebox
+
+class PetInventory:
+    def __init__(self, name, owner, pet_type, gender, service, days=None):
+        self.name = name
+        self.owner = owner
+        self.pet_type = pet_type
+        self.gender = gender
+        self.service = service
+        self.days = days
+        self.price = 0
+
+    def calculate_price(self):
+        if self.service.lower() == "sleepover":
+            if self.pet_type.lower() == "cat":
+                if self.days == 2:
+                    self.price = 150
+                elif self.days == 7:
+                    self.price = 360
+                elif self.days == 10:
+                    self.price = 560
+            elif self.pet_type.lower() == "dog":
+                if self.days == 2:
+                    self.price = 120
+                elif self.days == 7:
+                    self.price = 300
+                elif self.days == 10:
+                    self.price = 500
+        elif self.service.lower() == "haircut":
+            if self.pet_type.lower() == "cat":
+                self.price = 30
+            elif self.pet_type.lower() == "dog":
+                self.price = 40
+        elif self.service.lower() == "shower":
+            if self.gender.lower() == "male":
+                self.price = 30
+            elif self.gender.lower() == "female":
+                self.price = 45
+
+    def NinthPharmacy():
+        map = TkinterMapView(myframe, width=500, height=400, corner_radius=0)
+        map.place(x=410, y=35)
+        map.set_tile_server('https://mt0.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}&s=Ga', max_zoom=22)
+        map.set_position(31.91693536916252, 35.86217291540209)
+        map.set_zoom(15)
+        marker = map.set_marker(31.91693536916252, 35.86217291540209)
+        marker.set_text('صيدلية كاميليا')
+
+    def display(self):
+        return f"{self.owner},{self.gender},{self.name},{self.pet_type},{self.service},{self.days},{self.price}"
+
+class GUI:
+    def __init__(self):
+        self.m = Tk()
+        self.m.title("Welcome to Pet Services")
+
+        Label(self.m , text="Hi..\n we well take care of your pet..\n give us your information ").pack()
+        Label(self.m, text='Name').pack()
+        self.e1 = Entry(self.m)
+        self.e1.pack()
+
+        Label(self.m, text='Owner').pack()
+        self.e2 = Entry(self.m)
+        self.e2.pack()
+
+        Label(self.m, text='Choose pet type:').pack()
+        self.pet_type_var = StringVar()
+        pet_type_options = ['Cat', 'Dog']
+        self.pet_type_menu = OptionMenu(self.m, self.pet_type_var, *pet_type_options)
+        self.pet_type_menu.pack()
+
+        Label(self.m, text='Gender').pack()
+        self.gender_var = StringVar()
+        gender_options = ['Male', 'Female']
+        self.gender_menu = OptionMenu(self.m, self.gender_var, *gender_options)
+        self.gender_menu.pack()
+
+        Label(self.m, text='Choose service:').pack()
+        self.service_var = StringVar()
+        service_options = ['Sleepover', 'Haircut', 'Shower']
+        self.service_menu = OptionMenu(self.m, self.service_var, *service_options)
+        self.service_menu.pack()
+
+        Label(self.m, text='Number of Days (for sleepover(2,7,10 maximum days)):').pack()
+        self.e3 = Entry(self.m)
+        self.e3.pack()
+
+        Button(self.m, text="Calculate Price", command=self.calculate_price).pack()
+
+        b9 = Button(myframe, text='صيدلية كاميليا', cursor='hand2', bg='white', fg='black', bd=1, relief=SOLID,
+                    font='Tajawal 12', width=13, command=NinthPharmacy)
+        b9.place(x=270, y=380)
+
+    def calculate_price(self):
+        pet = PetInventory(self.e1.get(), self.e2.get(), self.pet_type_var.get(), self.gender_var.get(),self.service_var.get(), int(self.e3.get()) if self.e3.get() else " ")
+        pet.calculate_price()
+        messagebox.showinfo("Total Price", f"Total Price for {pet.service} ({pet.pet_type}): ${pet.price}")
+
+
+
+
+        fh=open("PetServicesInfoo.txt", "at")
+        fh.write(f"{pet.display()}\n")
+        fh.close()
+
+    def run(self):
+        self.m.mainloop()
+
+
+gui = GUI()
+gui.run()

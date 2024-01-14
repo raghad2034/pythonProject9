@@ -1,0 +1,5 @@
+sd,Female,ff,Cat,Sleepover,None h,0
+sd,Female,ff,Cat,Sleepover,2,150
+sd,Female,ff,Cat,Haircut,None h,30
+sd,Female,fg,Cat,Haircut, ,30
+se,Male,df,Dog,Haircut, ,40
